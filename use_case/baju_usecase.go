@@ -6,8 +6,10 @@ import (
 )
 
 type BajuUsecase interface {
-	// AddBaju(id int, name string) bool
+	Addbaju(id int, name string, harga float32) bool
 	GetList() []entity.Baju
+	DeleteBaju(id int) bool
+	BajuLimit(limit int) []entity.Baju
 }
 
 type bajuUsecase struct {
@@ -16,20 +18,32 @@ type bajuUsecase struct {
 
 func NewBajuUseCase(br repository.BajuRepository) BajuUsecase {
 	return &bajuUsecase{
-		br: repository.NewBajuRepository(),
+		br: br,
 	}
 }
 
-// func (b *bajuUsecase) AddBaju(id int, name string) bool {
-// 	p := entity.Baju{
-// 		Id:   id,
-// 		Name: name,
-// 	}
+func (b *bajuUsecase) Addbaju(id int, name string, harga float32) bool {
+	p := entity.Baju{
+		Id:    id,
+		Name:  name,
+		Harga: harga,
+	}
 
-// 	b.AddBaju(p.Id, p.Name)
-// 	return true
-// }
+	b.br.AddBaju(p)
+	return true
+
+}
 
 func (b *bajuUsecase) GetList() []entity.Baju {
-	return b.GetList()
+	return b.br.GetList()
+}
+
+func (b *bajuUsecase) DeleteBaju(id int) bool {
+	b.br.DeleteBaju(id)
+	println(id)
+	return true
+}
+
+func (b *bajuUsecase) BajuLimit(limit int) []entity.Baju {
+	return b.br.BajuLimit(limit)
 }
